@@ -1,0 +1,39 @@
+Tipos:
+    - Data service:
+        - É um tipo de um serviço que simplesmente vai expor dados, como se fosse uma fina camada antes do seu banco de dados. Então o que ele vai fazer é receber dados e realizar o processamento necessário para manter aqueles dados consistentes.
+    - Business service:
+        - É um tipo de serviço que além de consumir dados de alguma forma, seja consumindo um data service ou tendo acesso direto ao banco de dados, ele fornece operações mais complexas.
+    - Translation service:
+        - São basicamente uma forma de você acessar algum recurso externo, mas mantendo certo controle. Então imagine que, por exemplo, eu queira consumir um serviço de log externo.
+    - Edge service:
+        - É um serviço de ponta, é algo que é entregue diretamente para o cliente e pode ter necessidades específicas. 
+
+Padrões:
+    - Strangler pattern:
+        - Pegar um monolito e o transformamos em vários serviços para chegarmos na arquitetura de microsserviços.
+    - Sidecar pattern:
+        - Um serviço que recebe muitas requisições vai também fazer muitas requisições de log. Já um outro serviço que recebe pouca coisa vai precisar fazer menos log. Então podemos ter um pedaço de código que ajuda os outros microsserviços, mas estando dentro mesmo. Então é um pedaço de código compartilhado entre todos eles.
+    - Process aggregator:
+        - Um serviço de negócio agrega serviços de domínio, um process aggregator, um agregador de processos agrega serviços de negócio. Então serviços de domínio, serviços de negócio, agregadores de processo. Então são similares no conceito, mas vamos agregar tipos diferentes.
+    - Edge pattern:
+        - Você vai se adequar ao seu cliente, a cada tipo de cliente ou cliente em si de negócio, você vai se adequar para que o processo seja otimizado, para não consumirmos banda desnecessária no celular, por exemplo, para que não falte informação para a web, esse tipo de coisa.
+
+Banco de daos:
+    - Single service database:
+        - Unico serviço para unico database, esse é o mais adequado
+    - Shared service database:
+        - tratar o banco compartilhado como se fossem bancos distintos.
+
+Codificação:
+    - CQRS(command query responsibility segragation) - Segregação da responsabilidade entre um comando e uma busca. Ou seja, modelos diferentes para escrever e para ler. Modelos de escrita, modelos de leitura.
+
+Operações:
+    - Agregação de logs:
+        - Formatos de log devem ser compartilhados entre todos os serviços. Eu não posso ter um serviço exportando algo, fazendo log de algo em XML, outro no formato binário próprio, outro em TXT, não, eu preciso ter um formato único.
+        - A taxonomia tem que ser compartilhada, deve ter algo em comum. Então por exemplo, o que é um log de erro? O que é um log de warning? O que é a classificação de logs, a organização de logs deve ser compartilhada para que eu consiga pegar.
+        - A partir de um processo que é a nossa aplicação, mandamos os logs para saída padrão e a partir disso podemos ter um serviço realmente específico de logs, não nosso, um serviço externo, que coleta todos os logs de todos os nossos processos e agrega, faz o parsing desses logs, que é uma parte da tarefa de agregação, os categoriza, gera relatórios bonitos.
+        - Os logs são utilizados para rastrearmos as chamadas, para fazermos o que chamado de tracing. De novo, existem serviços que organizam esse tracing, o que veríamos, o que enxergamos como uma stack trace.
+    - Agregação de métricas:
+        - Métricas só precisam de instrumentação.
+        - Métricas nos permitem saber o que esta acontecendo em determinado momento.
+        - Verifica saúde dos sistemas.
